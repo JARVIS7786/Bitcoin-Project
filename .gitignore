@@ -1,0 +1,57 @@
+# Self
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (never commit raw/processed data)
+data/processed/
+data/features/
+*.parquet
+*.csv
+
+# Experiments
+experiments/mlruns/
+mlruns/
+
+# Outputs
+outputs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment secrets
+.env
+.env.local
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
