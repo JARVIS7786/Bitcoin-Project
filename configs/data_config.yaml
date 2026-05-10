@@ -1,0 +1,80 @@
+# Data Configuration for PrimeTRADE
+
+# Data paths
+data:
+  raw_path: "data/raw"
+  processed_path: "data/processed"
+  features_path: "data/features"
+
+  # Input files
+  sentiment_file: "fear_greed_index.csv"
+  trades_file: "historical_data.csv"
+
+  # Output files
+  cleaned_sentiment: "sentiment_cleaned.parquet"
+  cleaned_trades: "trades_cleaned.parquet"
+  aligned_data: "aligned_data.parquet"
+
+# Data cleaning parameters
+cleaning:
+  # Missing value thresholds
+  max_missing_ratio: 0.3  # Drop columns with >30% missing
+
+  # Outlier detection (IQR method)
+  outlier_method: "iqr"
+  iqr_multiplier: 3.0  # Values beyond Q1 - 3*IQR or Q3 + 3*IQR
+
+  # Duplicate handling
+  dedup_columns: ["timestamp", "trader_id"]  # For trades data
+  keep_duplicates: "first"  # Keep first occurrence
+
+  # Data type validation
+  numeric_columns:
+    - "fear_greed_value"
+    - "pnl"
+    - "leverage"
+    - "position_size"
+
+  datetime_columns:
+    - "timestamp"
+
+# Timestamp alignment
+alignment:
+  # Timezone conversion
+  source_timezone: "Asia/Kolkata"  # IST
+  target_timezone: "UTC"
+
+  # Timestamp format
+  datetime_format: "%Y-%m-%d %H:%M:%S"
+
+  # Alignment strategy
+  merge_strategy: "asof"  # Use asof merge for time series
+  tolerance: "1H"  # Max time difference for matching
+
+# Data validation
+validation:
+  # Required columns
+  sentiment_required_columns:
+    - "timestamp"
+    - "fear_greed_value"
+    - "classification"
+
+  trades_required_columns:
+    - "timestamp"
+    - "trader_id"
+    - "pnl"
+    - "leverage"
+    - "position_size"
+
+  # Value ranges
+  fear_greed_range: [0, 100]
+  leverage_range: [1, 100]
+
+  # Minimum data requirements
+  min_rows: 100
+  min_date_range_days: 7
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "logs/data_pipeline.log"
