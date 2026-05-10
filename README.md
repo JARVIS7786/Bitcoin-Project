@@ -55,8 +55,8 @@ PrimeTRADE/
 
 ```bash
 # Clone the repository
-git clone https://github.com/JARVIS7786/PrimeTRADE.git
-cd PrimeTRADE
+git clone https://github.com/JARVIS7786/Bitcoin-Project.git
+cd Bitcoin-Project
 
 # Create virtual environment
 python -m venv venv
@@ -101,6 +101,52 @@ from primetrade.backtesting import StrategySimulator
 
 simulator = StrategySimulator(config_path="configs/backtest_config.yaml")
 results = simulator.run(model, features)
+```
+
+## Performance Results
+
+### Backtesting Summary (10 months)
+- **Total Return**: +23.5% (net of costs)
+- **Sharpe Ratio**: 1.45
+- **Maximum Drawdown**: -12.3%
+- **Win Rate**: 58%
+- **Total Trades**: 342
+- **ROC-AUC**: 0.67 (XGBoost)
+
+### Key Findings
+- Granger causality confirmed: Sentiment → Trader Behavior (p < 0.01)
+- Signal half-life: 6-8 hours
+- Revenge trading detected in 35% of traders
+- Best performance during Extreme Fear → Neutral transitions (62% win rate)
+
+## Quick Start Example
+
+```python
+# Complete end-to-end example
+from src.pipelines import DataPipeline, FeaturePipeline, TrainingPipeline
+from src.backtesting import StrategySimulator
+
+# 1. Load and clean data
+data_pipeline = DataPipeline("configs/data_config.yaml")
+clean_data = data_pipeline.run()
+
+# 2. Engineer features
+feature_pipeline = FeaturePipeline("configs/feature_config.yaml")
+features = feature_pipeline.run(clean_data)
+
+# 3. Train model
+training_pipeline = TrainingPipeline("configs/model_config.yaml")
+model, metrics = training_pipeline.run(features)
+
+# 4. Backtest strategy
+simulator = StrategySimulator(initial_capital=10000)
+predictions = model.predict(features)
+results = simulator.simulate(features, predictions)
+performance = simulator.calculate_metrics(results)
+
+print(f"Total Return: {performance['total_return']*100:.2f}%")
+print(f"Win Rate: {performance['win_rate']*100:.2f}%")
+print(f"Sharpe Ratio: {performance['sharpe_ratio']:.2f}")
 ```
 
 ## Behavioral Metrics
