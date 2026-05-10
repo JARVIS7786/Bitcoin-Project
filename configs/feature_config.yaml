@@ -1,0 +1,42 @@
+# Feature Configuration for PrimeTRADE
+
+# Feature engineering parameters
+features:
+  # Sentiment features
+  sentiment:
+    window_sizes: [3, 7, 14, 30]
+    extreme_fear_threshold: 20
+    extreme_greed_threshold: 80
+
+  # Behavioral metrics
+  behavioral:
+    lookback_window: 10
+    win_streak_threshold: 3
+    extreme_sentiment_threshold: 20
+
+  # Risk features
+  risk:
+    window_sizes: [7, 14, 30]
+
+  # Temporal features
+  temporal:
+    include_hour: true
+    include_day_of_week: true
+    include_weekend: true
+
+# Target variables
+targets:
+  - is_profitable_intraday
+  - is_profitable_next_day
+  - is_profitable_7d
+
+# Feature selection
+selection:
+  method: "importance"  # importance, correlation, recursive
+  max_features: 50
+  min_importance: 0.01
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "logs/feature_pipeline.log"
